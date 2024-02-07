@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+c-enum = "0.2.2"
 xed-sys = "0.5"
 
