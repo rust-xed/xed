@@ -144,3 +144,19 @@ crate::macros::xed_enum! {
         ZEROING,
     }
 }
+
+impl Operand {
+    /// Tests the enum for inclusion in `REG0` through `REG9`.
+    ///
+    /// Note that there are other registers for memory addressing. See
+    /// [`InstOperand::is_memory_addressing_register`].
+    pub fn is_register(self) -> bool {
+        unsafe { xed_operand_is_register(self.into_raw()) != 0 }
+    }
+
+    /// Tests the enum of inclusion in `BASE0`, `BASE1`, `INDEX`, `SEG0`,
+    /// `SEG1`.
+    pub fn is_memory_addressing_register(self) -> bool {
+        unsafe { xed_operand_is_memory_addressing_register(self.into_raw()) != 0 }
+    }
+}

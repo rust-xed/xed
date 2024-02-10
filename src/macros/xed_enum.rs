@@ -7,6 +7,8 @@ macro_rules! xed_enum {
                 $variant:ident $( => $value:ident )?
             ),* $(,)?
         }
+
+        $( name = $enum_name:ident ; )?
     } => {
         $( #[$attr] )*
         #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -75,7 +77,10 @@ macro_rules! xed_enum {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
                 let value = self.into_raw();
                 let cstr = unsafe {
-                    paste::paste!(xed_sys::[< $base:lower _enum_t2str >](value))
+                    paste::paste!($crate::macros::first!(
+                        $( [ xed_sys::[< $enum_name 2str >](value) ] )?
+                        [ xed_sys::[< $base:lower _enum_t2str >](value) ]
+                    ))
                 };
 
                 if cstr.is_null() {
@@ -128,6 +133,8 @@ macro_rules! xed_enum {
                 $variant:ident $( => $value:ident )?
             ),* $(,)?
         }
+
+        $( name = $enum_name:ident ; )?
     } => {
         paste::paste! {
             $crate::macros::xed_enum! {
@@ -138,6 +145,8 @@ macro_rules! xed_enum {
                         $variant $( => $value )?,
                     )*
                 }
+
+                $( name = $enum_name; )?
             }
         }
     }

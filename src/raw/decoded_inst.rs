@@ -8,6 +8,13 @@ use super::{
     OperandElementType, Register, SimpleFlag,
 };
 
+/// The main container for instructions.
+///
+/// It holds an array of operands with derived information from the decode and
+/// also a valid [`Inst`] pointer which describes the operand templates and the
+/// operand order.
+///
+/// [`Inst`]: super::Inst
 #[repr(transparent)]
 pub struct DecodedInst<'d> {
     inst: xed_decoded_inst_t,
