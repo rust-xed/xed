@@ -249,10 +249,10 @@ impl<'d> DecodedInst<'d> {
     /// This is different than [`effective_operand_width`][0] which only returns
     /// 16/32/64. This factors in the BYTEOP attribute when computing its return
     /// value. Thios function provides informatino that is only useful for
-    /// (scalabel) GPR-operations. Individual operands have more spcific
-    /// information available from [`Operand::element_size_bits`].
+    /// (scalable) GPR-operations. Individual operands have more spcific
+    /// information available from [`OperandValue::element_size_bits`].
     ///
-    /// [0]: Operand::effective_operand_width
+    /// [0]: OperandValue::effective_operand_width
     pub fn operand_width(&self) -> u32 {
         unsafe { xed_decoded_inst_get_operand_width(self.as_raw()) }
     }
