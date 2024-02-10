@@ -1,12 +1,10 @@
-use std::ffi::c_uint;
-
 use xed_sys::*;
 
 use crate::macros::wrapper_enum;
 
 wrapper_enum! {
     #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-    pub enum MachineMode : c_uint {
+    pub enum MachineMode {
         /// 64b operating mode.
         Long64 = XED_MACHINE_MODE_LONG_64,
 

@@ -1,12 +1,10 @@
-use std::ffi::c_uint;
-
 use xed_sys::*;
 
 use crate::macros::wrapper_enum;
 
 wrapper_enum! {
     #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-    pub enum AddressWidth : c_uint {
+    pub enum AddressWidth {
         /// 16b addressing
         W16b = XED_ADDRESS_WIDTH_16b,
 
