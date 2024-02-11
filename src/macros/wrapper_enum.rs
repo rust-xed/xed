@@ -187,6 +187,11 @@ pub(crate) const fn is_contiguous(variants: &[c_uint], assert: bool) -> Option<(
         if !contains(variants, variant) {
             if assert {
                 let slice: [(); 0] = [];
+
+                // This statement isn't supposed to have an effect. It's just meant to create an
+                // assertion message that specifies the value of the variant that is contained
+                // within.
+                #[allow(clippy::no_effect)]
                 slice[variant as usize];
             }
 

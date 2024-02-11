@@ -148,6 +148,10 @@ impl<'a, 'd> OperandValues<'a, 'd> {
         Self { inst }
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     pub fn len(&self) -> usize {
         unsafe { xed_decoded_inst_noperands(self.inst.as_raw()) as usize }
     }
@@ -309,6 +313,10 @@ impl<'d> DecodedInst<'d> {
 pub struct MemoryOperands<'a, 'd>(OperandValues<'a, 'd>);
 
 impl<'a, 'd> MemoryOperands<'a, 'd> {
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     pub fn len(&self) -> usize {
         unsafe { xed_decoded_inst_number_of_memory_operands(self.0.inst.as_raw()) as usize }
     }
