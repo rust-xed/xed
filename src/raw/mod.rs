@@ -7,7 +7,10 @@ mod address_width;
 mod attribute;
 mod category;
 mod chip;
+mod chip_features;
+mod decode;
 mod decoded_inst;
+mod error;
 mod exception;
 mod extension;
 mod flag;
@@ -34,9 +37,10 @@ pub use self::address_width::AddressWidth;
 pub use self::attribute::Attribute;
 pub use self::category::Category;
 pub use self::chip::Chip;
-pub use self::decoded_inst::{
-    DecodedInst, MemoryOperand, MemoryOperands, OperandValue, OperandValues,
-};
+pub use self::chip_features::ChipFeatures;
+pub use self::decode::{decode, DecodeOptions};
+pub use self::decoded_inst::*;
+pub use self::error::Error;
 pub use self::exception::Exception;
 pub use self::extension::Extension;
 pub use self::flag::Flag;

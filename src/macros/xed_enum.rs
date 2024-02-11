@@ -9,6 +9,7 @@ macro_rules! xed_enum {
         }
 
         $( name = $enum_name:ident ; )?
+        $( invalid = $invalid:ident; )?
     } => {
         $( #[$attr] )*
         #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -114,7 +115,10 @@ macro_rules! xed_enum {
                         stringify!([< $base _ LAST >])
                     ),
                     None => assert_eq!(
-                        [< $base _ INVALID >] + 1,
+                        1 + $crate::macros::first!(
+                            $( [ $invalid ] )?
+                            [ [< $base _ INVALID >] ]
+                        ),
                         [< $base _ LAST >],
                         "Enum definition not up to date: enum has no variants but {} is not 1",
                         stringify!([< $base _ LAST >])
@@ -134,7 +138,8 @@ macro_rules! xed_enum {
             ),* $(,)?
         }
 
-        $( name = $enum_name:ident ; )?
+        $( name = $enum_name:ident; )?
+        $( invalid = $invalid:ident; )?
     } => {
         paste::paste! {
             $crate::macros::xed_enum! {
@@ -147,6 +152,7 @@ macro_rules! xed_enum {
                 }
 
                 $( name = $enum_name; )?
+                $( invalid = $invalid; )?
             }
         }
     }

@@ -22,6 +22,18 @@ pub struct DecodedInst<'d> {
 }
 
 impl<'d> DecodedInst<'d> {
+    /// Create a `DecodedInst` from the underlyingg [`xed_decoded_inst_t`].
+    ///
+    /// # Safety
+    /// - The lifetime of the resulting `DecodedInst` must be less than the
+    ///   lifetime of the instruction bytes that were used to decode into `raw`.
+    pub unsafe fn from_raw(raw: xed_decoded_inst_t) -> Self {
+        Self {
+            inst: raw,
+            _marker: PhantomData,
+        }
+    }
+
     pub fn as_raw(&self) -> &xed_decoded_inst_t {
         &self.inst
     }

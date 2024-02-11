@@ -15,7 +15,7 @@ impl State {
     ///   [`AddressWidth::W64b`].
     pub fn new(mmode: MachineMode, stack_addr_width: AddressWidth) -> Self {
         if mmode == MachineMode::Long64 {
-            assert_eq!(stack_addr_width, AddressWidth::W64b);
+            assert_eq!(stack_addr_width, AddressWidth::QWord);
         }
 
         crate::raw::init_tables();
@@ -24,6 +24,12 @@ impl State {
         unsafe { xed_state_init2(&mut state, mmode.into(), stack_addr_width.into()) };
 
         Self(state)
+    }
+
+    pub fn from_raw(raw: xed_state_t) -> Self {
+        super::init_tables();
+
+        Self(raw)
     }
 
     #[inline]
