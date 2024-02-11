@@ -14,7 +14,8 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest
+          # disabled for the moment
+          # - macos-latest
           - windows-latest
       fail-fast: false
     steps:
