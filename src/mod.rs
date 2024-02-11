@@ -40,7 +40,7 @@ pub use self::chip::Chip;
 pub use self::chip_features::ChipFeatures;
 pub use self::decode::{decode, DecodeOptions};
 pub use self::decoded_inst::*;
-pub use self::error::Error;
+pub use self::error::{Error, InvalidEnumValue};
 pub use self::exception::Exception;
 pub use self::extension::Extension;
 pub use self::flag::Flag;

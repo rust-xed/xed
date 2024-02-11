@@ -12,7 +12,7 @@ impl IClass {
     /// > This function will transparently initialize the global data tables if
     /// > they have not already been initialized.
     pub fn max_iform(self) -> u32 {
-        crate::raw::init_tables();
+        super::init_tables();
 
         unsafe { xed_iform_max_per_iclass(self.0) }
     }

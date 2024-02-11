@@ -18,7 +18,7 @@ impl State {
             assert_eq!(stack_addr_width, AddressWidth::QWord);
         }
 
-        crate::raw::init_tables();
+        super::init_tables();
 
         let mut state: xed_state_t = unsafe { std::mem::zeroed() };
         unsafe { xed_state_init2(&mut state, mmode.into(), stack_addr_width.into()) };
