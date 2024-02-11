@@ -5,7 +5,6 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-c-enum = "0.2.2"
 paste = "1.0.14"
 xed-sys = "0.5"
 
