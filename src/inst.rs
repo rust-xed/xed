@@ -52,13 +52,11 @@ impl Inst {
     }
 
     pub fn iform(&self) -> IForm {
-        unsafe { xed_inst_iform_enum(self.as_raw()) }
-            .into()
+        unsafe { xed_inst_iform_enum(self.as_raw()) }.into()
     }
 
     pub fn iclass(&self) -> IClass {
-        unsafe { xed_inst_iclass(self.as_raw()) }
-            .into()
+        unsafe { xed_inst_iclass(self.as_raw()) }.into()
     }
 
     pub fn category(&self) -> Category {
