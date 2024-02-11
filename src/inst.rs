@@ -52,15 +52,11 @@ impl Inst {
     }
 
     pub fn iform(&self) -> IForm {
-        unsafe { xed_inst_iform_enum(self.as_raw()) }
-            .try_into()
-            .expect("instruction iform was invalid")
+        unsafe { xed_inst_iform_enum(self.as_raw()) }.into()
     }
 
     pub fn iclass(&self) -> IClass {
-        unsafe { xed_inst_iclass(self.as_raw()) }
-            .try_into()
-            .expect("instruction iclass was invalid")
+        unsafe { xed_inst_iclass(self.as_raw()) }.into()
     }
 
     pub fn category(&self) -> Category {
