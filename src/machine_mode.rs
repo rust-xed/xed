@@ -21,7 +21,7 @@ wrapper_enum! {
         Legacy16 = XED_MACHINE_MODE_LEGACY_16,
 
         /// 16b real mode.
-        Read16 = XED_MACHINE_MODE_REAL_16,
+        Real16 = XED_MACHINE_MODE_REAL_16,
 
         /// 32b real mode.
         Real32 = XED_MACHINE_MODE_REAL_32,

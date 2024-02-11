@@ -42,6 +42,12 @@ macro_rules! xed_enum {
                 "Create a `", stringify!($name), "` from the underlying enum value."
             )]
             pub const fn from_raw(value: u32) -> Option<Self> {
+                paste::paste! {
+                    if value >= [< $base _ LAST >] {
+                        return None;
+                    }
+                }
+
                 match std::num::NonZeroU32::new(value) {
                     Some(value) => Some(Self(value)),
                     None => None
@@ -74,7 +80,7 @@ macro_rules! xed_enum {
             }
         }
 
-        impl std::fmt::Display for $name {
+        impl std::fmt::Debug for $name {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
                 let value = self.into_raw();
                 let cstr = unsafe {
@@ -110,7 +116,7 @@ macro_rules! xed_enum {
                     Some(max) => assert_eq!(
                         max + 1,
                         [< $base _ LAST >],
-                        "Enum definition not up to date: last enum value {} is not one less than {}",
+                        "Enum definition not up to date: last enum value {:?} is not one less than {}",
                         $name::from_raw(max).unwrap(),
                         stringify!([< $base _ LAST >])
                     ),

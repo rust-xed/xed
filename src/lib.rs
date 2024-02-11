@@ -46,6 +46,7 @@ mod operand_xtype;
 mod register;
 mod simple_flag;
 mod state;
+mod syntax;
 mod util;
 
 pub use self::action::{Action, FlagAction};
@@ -56,7 +57,7 @@ pub use self::chip::Chip;
 pub use self::chip_features::ChipFeatures;
 pub use self::decode::{decode, DecodeOptions};
 pub use self::decoded_inst::*;
-pub use self::error::{Error, InvalidEnumValue};
+pub use self::error::*;
 pub use self::exception::Exception;
 pub use self::extension::Extension;
 pub use self::flag::Flag;
@@ -77,6 +78,7 @@ pub use self::operand_xtype::OperandElementXType;
 pub use self::register::Register;
 pub use self::simple_flag::SimpleFlag;
 pub use self::state::State;
+pub use self::syntax::Syntax;
 
 /// Initialize the XED encode and decode tables.
 ///

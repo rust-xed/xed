@@ -3,6 +3,7 @@ use std::fmt;
 use xed_sys::*;
 
 crate::macros::xed_enum! {
+    /// Errors emitted by various XED functions.
     pub enum Error {
         //// There were not enough bytes in t he given buffer.
         BUFFER_TOO_SHORT,
@@ -71,6 +72,14 @@ crate::macros::xed_enum! {
     invalid = XED_ERROR_NONE;
 }
 
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // TODO: Maybe xed has some error strings for these?
+        <Self as fmt::Debug>::fmt(self, f)
+    }
+}
+
+impl std::error::Error for Error {}
 
 /// Error for when converting an integer to an enum fails.
 #[derive(Copy, Clone, Debug)]
@@ -98,3 +107,14 @@ impl fmt::Display for InvalidEnumValue {
         write!(f, "{:?} is not a valid value for {}", self.value, self.name)
     }
 }
+
+impl std::error::Error for InvalidEnumValue {}
+
+// #[derive(Copy, Clone, Debug)]
+// pub struct DisassembleError(());
+
+// impl fmt::Display for DisassembleError {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         f.write_str("")
+//     }
+// }
