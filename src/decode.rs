@@ -40,7 +40,7 @@ impl DecodeOptions {
 ///   anything beyond the 15th byte.
 /// - `options` - A set of [`DecodeOptions`] that control how the instruction is
 ///   decoded.
-pub fn decode<'a>(itext: &'a [u8], options: DecodeOptions) -> Result<DecodedInst<'a>, Error> {
+pub fn decode(itext: &[u8], options: DecodeOptions) -> Result<DecodedInst<'_>, Error> {
     let mut inst = MaybeUninit::uninit();
     unsafe { xed_decoded_inst_zero_set_mode(inst.as_mut_ptr(), options.state.as_raw()) };
 

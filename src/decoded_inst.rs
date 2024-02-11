@@ -546,7 +546,7 @@ impl<'d> DecodedInst<'d> {
 // Formatting
 impl<'d> DecodedInst<'d> {
     /// Disassemble this instruction using the specified syntax.
-    pub fn disassemble<'a>(&'a self, syntax: Syntax) -> String {
+    pub fn disassemble(&self, syntax: Syntax) -> String {
         let mut buffer = vec![0u8; 32];
 
         loop {
