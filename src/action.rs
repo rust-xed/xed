@@ -1,6 +1,9 @@
 use xed_sys::*;
 
-use super::Flag;
+use super::{
+    raw::{AsRaw, IntoRaw},
+    Flag,
+};
 
 crate::macros::xed_enum! {
     pub enum Action => XED_FLAG_ACTION {
@@ -39,31 +42,12 @@ impl Action {
     }
 }
 
-#[repr(transparent)]
-pub struct FlagAction(xed_flag_action_t);
+crate::macros::wrapper_type! {
+    #[derive(FromRaw, AsRaw, AsRawMut, IntoRaw)]
+    pub struct FlagAction(xed_flag_action_t);
+}
 
 impl FlagAction {
-    pub fn from_ref(raw: &xed_flag_action_t) -> &Self {
-        // SAFETY: SimpleFlag is #[repr(transparent)]
-        unsafe { std::mem::transmute(raw) }
-    }
-
-    pub fn from_raw(raw: xed_flag_action_t) -> Self {
-        Self(raw)
-    }
-
-    pub fn into_raw(self) -> xed_flag_action_t {
-        self.0
-    }
-
-    pub fn as_raw(&self) -> &xed_flag_action_t {
-        &self.0
-    }
-
-    pub fn as_raw_mut(&mut self) -> &mut xed_flag_action_t {
-        &mut self.0
-    }
-
     /// The action performed by this flag.
     pub fn action(&self) -> Action {
         // Note: xed takes an index i but it is entirely unused by the actual function

@@ -1,32 +1,16 @@
 use xed_sys::*;
 
-use super::{FlagAction, FlagSet};
+use super::{
+    raw::{AsRaw, FromRaw},
+    FlagAction, FlagSet,
+};
 
-#[repr(transparent)]
-pub struct SimpleFlag(xed_simple_flag_t);
+crate::macros::wrapper_type! {
+    #[derive(FromRaw, AsRaw, AsRawMut, IntoRaw)]
+    pub struct SimpleFlag(xed_simple_flag_t);
+}
 
 impl SimpleFlag {
-    pub fn from_ref(raw: &xed_simple_flag_t) -> &Self {
-        // SAFETY: SimpleFlag is #[repr(transparent)]
-        unsafe { std::mem::transmute(raw) }
-    }
-
-    pub fn from_raw(raw: xed_simple_flag_t) -> Self {
-        Self(raw)
-    }
-
-    pub fn into_raw(self) -> xed_simple_flag_t {
-        self.0
-    }
-
-    pub fn as_raw(&self) -> &xed_simple_flag_t {
-        &self.0
-    }
-
-    pub fn as_raw_mut(&mut self) -> &mut xed_simple_flag_t {
-        &mut self.0
-    }
-
     /// Get the specific flag actions.
     pub fn flag_actions(&self) -> &[FlagAction] {
         let len = unsafe { xed_simple_flag_get_nflags(self.as_raw()) as usize };

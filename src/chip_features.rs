@@ -1,31 +1,13 @@
 use xed_sys::*;
 
-use super::{Chip, IsaSet};
+use super::{
+    raw::{AsRawMut, IntoRaw},
+    Chip, IsaSet,
+};
 
-#[repr(transparent)]
-pub struct ChipFeatures(xed_chip_features_t);
-
-impl ChipFeatures {
-    pub fn from_ref(raw: &xed_chip_features_t) -> &Self {
-        // SAFETY: ChipFeatures is #[repr(transparent)]
-        unsafe { std::mem::transmute(raw) }
-    }
-
-    pub fn from_raw(raw: xed_chip_features_t) -> Self {
-        Self(raw)
-    }
-
-    pub fn into_raw(self) -> xed_chip_features_t {
-        self.0
-    }
-
-    pub fn as_raw(&self) -> &xed_chip_features_t {
-        &self.0
-    }
-
-    pub fn as_raw_mut(&mut self) -> &mut xed_chip_features_t {
-        &mut self.0
-    }
+crate::macros::wrapper_type! {
+    #[derive(FromRaw, AsRaw, AsRawMut, IntoRaw)]
+    pub struct ChipFeatures(xed_chip_features_t);
 }
 
 impl ChipFeatures {

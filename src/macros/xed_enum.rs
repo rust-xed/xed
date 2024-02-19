@@ -12,6 +12,7 @@ macro_rules! xed_enum {
         $( invalid = $invalid:ident; )?
     } => {
         $( #[$attr] )*
+        #[repr(transparent)]
         #[derive(Copy, Clone, Eq, PartialEq, Hash)]
         $vis struct $name(std::num::NonZeroU32);
 
@@ -35,13 +36,11 @@ macro_rules! xed_enum {
                     );
                 )*
             }
-        }
 
-        impl $name {
             #[doc = concat!(
                 "Create a `", stringify!($name), "` from the underlying enum value."
             )]
-            pub const fn from_raw(value: u32) -> Option<Self> {
+            pub(crate) const fn from_raw(value: u32) -> Option<Self> {
                 paste::paste! {
                     if value >= [< $base _ LAST >] {
                         return None;
@@ -53,16 +52,29 @@ macro_rules! xed_enum {
                     None => None
                 }
             }
+        }
 
-            /// Convert this value into the underlying enum value.
-            pub const fn into_raw(self) -> u32 {
+        impl crate::raw::FromRaw for $name {
+            type CType = u32;
+
+            fn from_raw(value: Self::CType) -> Self {
+                $name::from_raw(value).expect("underlying enum value was invalid")
+            }
+
+            fn from_ref(raw: &Self::CType) -> &Self {
+                unsafe { std::mem::transmute(raw) }
+            }
+        }
+
+        impl crate::raw::IntoRaw for $name {
+            fn into_raw(self) -> u32 {
                 self.0.get()
             }
         }
 
         impl From<$name> for u32 {
             fn from(value: $name) -> u32 {
-                value.into_raw()
+                crate::raw::IntoRaw::into_raw(value)
             }
         }
 
@@ -82,7 +94,7 @@ macro_rules! xed_enum {
 
         impl std::fmt::Debug for $name {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-                let value = self.into_raw();
+                let value = crate::raw::IntoRaw::into_raw(*self);
                 let cstr = unsafe {
                     paste::paste!($crate::macros::first!(
                         $( [ xed_sys::[< $enum_name 2str >](value) ] )?
@@ -109,7 +121,7 @@ macro_rules! xed_enum {
                 let max = variants
                     .iter()
                     .copied()
-                    .map(|variant| variant.into_raw())
+                    .map(crate::raw::IntoRaw::into_raw)
                     .max();
 
                 match max {
