@@ -99,6 +99,39 @@ macro_rules! xed_enum {
             }
         }
 
+        impl std::str::FromStr for $name {
+            type Err = crate::InvalidEnumValue<String>;
+
+            fn from_str(s: &str) -> Result<Self, Self::Err> {
+                let mut owned = String::with_capacity(s.len() + 1);
+                owned.push_str(s);
+                owned.push('\0');
+
+                let cstr = match std::ffi::CStr::from_bytes_with_nul(owned.as_bytes()) {
+                    Ok(cstr) => cstr,
+                    Err(_) => {
+                        owned.pop();
+                        return Err(crate::InvalidEnumValue::new(owned, stringify!($name)));
+                    }
+                };
+
+                let variant = unsafe {
+                    paste::paste!($crate::macros::first!(
+                        $( [ xed_sys::[< str2 $enum_name >](cstr.as_ptr()) ] )?
+                        [ xed_sys::[< str2 $base:lower _enum_t >](cstr.as_ptr()) ]
+                    ))
+                };
+
+                match Self::from_raw(variant) {
+                    Some(value) => Ok(value),
+                    None => {
+                        owned.pop();
+                        Err(crate::InvalidEnumValue::new(owned, stringify!($name)))
+                    }
+                }
+            }
+        }
+
         paste::paste! {
             #[test]
             fn [< $name:snake:lower _up_to_date >]() {

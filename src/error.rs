@@ -83,17 +83,17 @@ impl std::error::Error for Error {}
 
 /// Error for when converting an integer to an enum fails.
 #[derive(Copy, Clone, Debug)]
-pub struct InvalidEnumValue {
-    value: u32,
+pub struct InvalidEnumValue<T = u32> {
+    value: T,
     name: &'static str,
 }
 
-impl InvalidEnumValue {
-    pub(crate) fn new(value: u32, name: &'static str) -> Self {
+impl<T> InvalidEnumValue<T> {
+    pub(crate) fn new(value: T, name: &'static str) -> Self {
         Self { value, name }
     }
 
-    pub fn value(self) -> u32 {
+    pub fn value(self) -> T {
         self.value
     }
 
@@ -102,13 +102,13 @@ impl InvalidEnumValue {
     }
 }
 
-impl fmt::Display for InvalidEnumValue {
+impl<T: fmt::Debug> fmt::Display for InvalidEnumValue<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:?} is not a valid value for {}", self.value, self.name)
     }
 }
 
-impl std::error::Error for InvalidEnumValue {}
+impl<T: fmt::Debug> std::error::Error for InvalidEnumValue<T> {}
 
 // #[derive(Copy, Clone, Debug)]
 // pub struct DisassembleError(());
