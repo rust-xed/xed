@@ -49,6 +49,8 @@ mod state;
 mod syntax;
 mod util;
 
+pub mod disassemble;
+
 pub use self::action::{Action, FlagAction};
 pub use self::address_width::AddressWidth;
 pub use self::attribute::Attribute;

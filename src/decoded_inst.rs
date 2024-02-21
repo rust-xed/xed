@@ -1,11 +1,10 @@
-use std::borrow::Cow;
 use std::marker::PhantomData;
 
 use xed_sys::*;
 
 use crate::{
     Attribute, Category, Chip, Extension, IClass, IForm, IsaSet, Operand, OperandAction,
-    OperandElementType, Register, SimpleFlag, Syntax,
+    OperandElementType, Register, SimpleFlag,
 };
 
 /// The main container for instructions.
@@ -548,43 +547,5 @@ impl<'d> DecodedInst<'d> {
     /// True for SSE/SSE2/etc. SIMD operations. Includes AES and PCLMULQDQ.
     pub fn classify_sse(&self) -> bool {
         unsafe { xed_classify_sse(self.as_raw()) != 0 }
-    }
-}
-
-// Formatting
-impl<'d> DecodedInst<'d> {
-    /// Disassemble this instruction using the specified syntax.
-    pub fn disassemble(&self, syntax: Syntax) -> String {
-        let mut buffer = vec![0u8; 32];
-
-        loop {
-            let success = unsafe {
-                xed_format_context(
-                    syntax.into_raw(),
-                    self.as_raw(),
-                    buffer.as_mut_ptr() as *mut std::os::raw::c_char,
-                    buffer.len() as _,
-                    0,
-                    std::ptr::null_mut(),
-                    None,
-                ) != 0
-            };
-
-            if success {
-                break;
-            }
-
-            buffer.resize(buffer.len() * 2, 0);
-        }
-
-        if let Some(index) = buffer.iter().position(|&b| b == 0) {
-            buffer.truncate(index);
-        }
-
-        match String::from_utf8_lossy(&buffer) {
-            Cow::Owned(text) => text,
-            // SAFETY: from_utf8_lossy just verified that the string is valid utf8
-            Cow::Borrowed(_) => unsafe { String::from_utf8_unchecked(buffer) },
-        }
     }
 }
