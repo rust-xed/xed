@@ -79,11 +79,12 @@ jobs:
       - uses: swlynch99/cargo-sweep-action@v1
       - uses: taiki-e/install-action@v2
         with:
-          tool: clippy-sarif,sarif-fmt
+          tool: clippy-sarif,sarif-fmt,cargo-deduplicate-warnings
 
       - name: cargo clippy
         run: |
           cargo clippy --all-targets --all-features --message-format json \
+            | cargo deduplicate-warnings \
             | clippy-sarif      \
             | tee clippy.sarif  \
             | sarif-fmt
