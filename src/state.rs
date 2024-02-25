@@ -26,6 +26,11 @@ impl State {
         Self(state)
     }
 
+    /// Create a new state for Long64 mode.
+    pub fn long64() -> Self {
+        Self::new(MachineMode::Long64, AddressWidth::QWord)
+    }
+
     pub fn from_raw(raw: xed_state_t) -> Self {
         super::init_tables();
 
