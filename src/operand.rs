@@ -1,5 +1,7 @@
 use xed_sys::*;
 
+use crate::raw::IntoRaw;
+
 crate::macros::xed_enum! {
     pub enum Operand {
         ABSBR,

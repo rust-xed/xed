@@ -1,6 +1,7 @@
 use xed_sys::*;
 
 use super::{
+    raw::{AsRaw, IntoRaw},
     Attribute, Category, DecodedInst, Exception, Extension, IClass, IForm, IsaSet, NonTerminal,
     Operand, OperandAction, OperandElementXType, OperandType, OperandValue, OperandVisibility,
     OperandWidth, Register,
@@ -8,31 +9,10 @@ use super::{
 
 used_in_docs!(DecodedInst, OperandValue);
 
-/// Constant information about a decoded instruction form.
-#[repr(transparent)]
-pub struct Inst(xed_inst_t);
-
-impl Inst {
-    pub fn from_ref(raw: &xed_inst_t) -> &Self {
-        // SAFETY: Inst is #[repr(transparent)]
-        unsafe { std::mem::transmute(raw) }
-    }
-
-    pub fn from_raw(raw: xed_inst_t) -> Self {
-        Self(raw)
-    }
-
-    pub fn into_raw(self) -> xed_inst_t {
-        self.0
-    }
-
-    pub fn as_raw(&self) -> &xed_inst_t {
-        &self.0
-    }
-
-    pub fn as_raw_mut(&mut self) -> &mut xed_inst_t {
-        &mut self.0
-    }
+crate::macros::wrapper_type! {
+    /// Constant information about a decoded instruction form.
+    #[derive(FromRaw, AsRaw, AsRawMut, IntoRaw)]
+    pub struct Inst(xed_inst_t);
 }
 
 impl Inst {
@@ -99,30 +79,9 @@ impl Inst {
     }
 }
 
-#[repr(transparent)]
-pub struct InstOperand(xed_operand_t);
-
-impl InstOperand {
-    pub fn from_ref(raw: &xed_operand_t) -> &Self {
-        // SAFETY: Inst is #[repr(transparent)]
-        unsafe { std::mem::transmute(raw) }
-    }
-
-    pub fn from_raw(raw: xed_operand_t) -> Self {
-        Self(raw)
-    }
-
-    pub fn into_raw(self) -> xed_operand_t {
-        self.0
-    }
-
-    pub fn as_raw(&self) -> &xed_operand_t {
-        &self.0
-    }
-
-    pub fn as_raw_mut(&mut self) -> &mut xed_operand_t {
-        &mut self.0
-    }
+crate::macros::wrapper_type! {
+    #[derive(FromRaw, AsRaw, AsRawMut, IntoRaw)]
+    pub struct InstOperand(xed_operand_t);
 }
 
 impl InstOperand {

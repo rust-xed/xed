@@ -43,6 +43,7 @@ mod operand_type;
 mod operand_visibility;
 mod operand_width;
 mod operand_xtype;
+mod raw;
 mod register;
 mod simple_flag;
 mod state;

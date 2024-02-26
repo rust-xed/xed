@@ -4,6 +4,7 @@ use std::marker::PhantomData;
 use xed_sys::*;
 
 use crate::{
+    raw::{FromRaw, IntoRaw},
     Attribute, Category, Chip, Extension, IClass, IForm, IsaSet, Operand, OperandAction,
     OperandElementType, Register, SimpleFlag, Syntax,
 };
@@ -475,7 +476,7 @@ impl<'d> DecodedInst<'d> {
         unsafe {
             xed_decoded_inst_get_rflags_info(self.as_raw())
                 .as_ref()
-                .map(SimpleFlag::from_ref)
+                .map(FromRaw::from_ref)
         }
     }
 

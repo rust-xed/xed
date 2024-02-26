@@ -2,7 +2,7 @@ use std::mem::MaybeUninit;
 
 use xed_sys::*;
 
-use super::{ChipFeatures, DecodedInst, Error, State};
+use super::{raw::AsRawMut, ChipFeatures, DecodedInst, Error, State};
 
 /// Options for [`decode`].
 ///
